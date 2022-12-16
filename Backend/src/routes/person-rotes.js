@@ -317,5 +317,75 @@ router.delete("/deleteproveedor/:telefono", async (req, res) => {
     }
 
 })
+//-------------------------------------------------------------------------------
+//--------------------------------CRUD-SUCURSALES--------------------------------
+//-------------------------------------------------------------------------------
+//READ
+router.get('/readsucursales', async (req, res) => {
+    sql = "SELECT * FROM SUCURSAL ";
+    let result = await BD.Open(sql, [], false);
+    Users = [];
+
+    result.rows.map(user => {
+        let userSchema = {
+            "id": user[0],
+            "nombre": user[1],
+            "telefono": user[2],
+            "lada": user[3],
+            "PaginaWeb": user[4],
+            "Direccion": user[5]
+        }
+        Users.push(userSchema);
+    })
+    res.json(Users);
+})
+//create
+router.post('/createsucursal', async (req, res) => {
+    try {
+        const { id, nombre, telefono, lada, paginaweb, direccion } = req.body;
+        sql = "insert into sucursal(SUC_ID, SUC_NOMBRE, SUC_TELEFONO, SUC_LADA, SUC_PAGWEB, SUC_DIRECCION) values (:id, :nombre, :telefono, :lada, :paginaweb, :direccion)";
+        await BD.Open(sql, [id, nombre, telefono, lada, paginaweb, direccion], true);
+        res.status(200).json({
+            "id": id,
+            "nombre": nombre,
+            "telefono": telefono,
+            "lada": lada,
+            "paginaweb": paginaweb,
+            "direccion": direccion
+        })
+    } catch (error) {
+        console.log(error);
+    }
+})
+//UPDATE
+router.put("/updateUser/:id", async (req, res, next) => {
+    try {
+        const {id}=req.params;
+        const { name, lastname, gender } = req.body;
+        
+        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
+        await BD.Open(sql, [id, name, lastname, gender], true);
+        res.status(200).json({
+            "id": id,
+            "name": name,
+            "lname": lastname,
+            "gender": gender
+        })
+    } catch (error) {
+        console.log(error);
+    }
+})
+//DELETE SI
+router.delete("/deletesucursal/:telefono", async (req, res) => {
+    try {
+        const {telefono} = req.params;
+        sql = "DELETE FROM SUCURSAL WHERE SUC_TELEFONO=:telefono" ;
+        await BD.Open(sql, [telefono], true);
+        res.json({ "msg": "Usuario Eliminado" })
+    } catch (error) {
+        console.log(error);
+    }
+
+})
 module.exports = router;
 
