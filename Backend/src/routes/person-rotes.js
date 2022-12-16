@@ -48,7 +48,7 @@ router.get('/readcliente/:id', async (req, res) => {
         }
         Users.push(userSchema);
     })
-    res.json(Users);
+    res.status(204).json(Users);
 })
 
 
@@ -154,6 +154,7 @@ router.post('/createempleado', async (req, res) => {
         console.log(error);
     }
 })
+
 //UPDATE
 
 router.put("/updateempleado/:telefono", async (req, res, next) => {
@@ -237,25 +238,33 @@ router.post('/createdetallepedido', async (req, res) => {
             "precio": precio,
             "tamaño": tamaño,
             "tipoharina": tipoharina,
-            "nombrepan": nombrepan
+            "nombrepan": nombrepan 
         })
     } catch (error) {
         console.log(error);
     }
 })
 //UPDATE
-router.put("/updateUser/:id", async (req, res, next) => {
+router.put("/updatedetallepedido/:numeropedido", async (req, res, next) => {
     try {
-        const {id}=req.params;
-        const { name, lastname, gender } = req.body;
-        
-        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        const {numeropedido}=req.params;
+        const { id, fechaped, fechaent, tipopago, cliente, empleado, personarecibe, cantidad, precio, tamaño, tipoharina, nombre} = req.body;
+        sql = "UPDATE DETALLE_PEDIDO SET DETALLE_PED_ID=:id, PED_NUMERO=:numeropedido, PED_FECHAPED=:fechaped, PED_FECHAENT=:fechaent, PED_TIPOPAGO=:tipopago, PED_CLIENTE=:cliente, PED_EMPLEADO=:empleado, PED_PERSONARECIBE=:personarecibe, PAN_CANTIDAD=:cantidad, PAN_PRECIO=:precio, PAN_TAMAÑO=:tamaño, PAN_TIPOHARINA=:tipoharina, PAN_NOMBRE=:nombre WHERE PED_NUMERO=:numeropedido ";
+        await BD.Open(sql, [id, numeropedido, fechaped, fechaent, tipopago, cliente, empleado, personarecibe, cantidad, precio, tamaño, tipoharina, nombre], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "numeropedido": numeropedido,
+            "fechaped": fechaped,
+            "fechaent": fechaent, 
+            "tipopago": tipopago,
+            "cliente": cliente,
+            "empleado": empleado,
+            "personarecibe": personarecibe,
+            "cantidad": cantidad,
+            "precio": precio,
+            "tamaño": tamaño,
+            "tipoharina": tipoharina,
+            "nombrepan": nombre
         })
     } catch (error) {
         console.log(error);
@@ -301,9 +310,9 @@ router.get('/readproveedor', async (req, res) => {
 //create
 router.post('/createproveedor', async (req, res) => {
     try {
-        const { id, nombre, apellidoP, apellidoM, telefono, lada, email, NombreEmpresa, direccion } = req.body;
+        const { id, nombre, apellidoP, apellidoM, telefono, lada, email, nombreempresa, direccion } = req.body;
         sql = "insert into proveedor(PROVEEDOR_ID, PROV_NOMBRE, PROV_APELLIDOP, PROV_APELLIDOM, PROV_TELEFONO, PROV_LADA, PROV_EMAIL,PROV_NOMBREEMPRESA, PROV_DIRECCION) values (:id,:nombre, :apellidoP, :apellidoM, :telefono, :lada, :email, :NombreEmpresa, :direccion)";
-        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, telefono, lada, email, NombreEmpresa, direccion], true);
+        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, telefono, lada, email, nombreempresa, direccion], true);
         res.status(200).json({
             "id": id,
             "nombre": nombre,
@@ -312,7 +321,7 @@ router.post('/createproveedor', async (req, res) => {
             "telefono": telefono,
             "lada": lada,
             "email": email,
-            "NombreEmpresa": NombreEmpresa,
+            "nombreempresa": nombreempresa,
             "direccion": direccion,
         })
     } catch (error) {
@@ -320,18 +329,22 @@ router.post('/createproveedor', async (req, res) => {
     }
 })
 //UPDATE
-router.put("/updateUser/:id", async (req, res, next) => {
+router.put("/updateproveedor/:telefono", async (req, res, next) => {
     try {
-        const {id}=req.params;
-        const { name, lastname, gender } = req.body;
-        
-        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        const {telefono}=req.params;    
+        const { id, nombre, apellidoP, apellidoM, lada, email, nombreempresa,  direccion } = req.body;
+        sql = "UPDATE proveedor SET PROVEEDOR_ID=:id, PROV_NOMBRE=:nombre, PROV_APELLIDOP=:apellidoP, PROV_APELLIDOM=:apellidoM, PROV_TELEFONO=:telefono, PROV_LADA=:lada, PROV_EMAIL=:email, PROV_NOMBREEMPRESA=:nombreempresa, PROV_DIRECCION=:direccion  WHERE PROV_TELEFONO=:telefono ";
+        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, telefono, lada, email, nombreempresa, direccion], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "nombre": nombre,
+            "apellidoP": apellidoP,
+            "apellidoM": apellidoM,
+            "telefono": telefono,
+            "lada": lada,
+            "email": email,
+            "nombreempresa": nombreempresa,
+            "direccion": direccion
         })
     } catch (error) {
         console.log(error);
@@ -390,18 +403,20 @@ router.post('/createsucursal', async (req, res) => {
     }
 })
 //UPDATE
-router.put("/updateUser/:id", async (req, res, next) => {
+router.put("/updatesucursal/:telefono", async (req, res, next) => {
     try {
-        const {id}=req.params;
-        const { name, lastname, gender } = req.body;
+        const {telefono}=req.params;    
+        const { id, nombre, lada, paginaweb, direccion } = req.body;
         
-        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        sql = "UPDATE sucursal SET SUC_ID=:id, SUC_NOMBRE=:nombre, SUC_TELEFONO=:telefono, SUC_LADA=:lada, SUC_PAGWEB=:paginaweb, SUC_DIRECCION=:direccion  WHERE SUC_TELEFONO=:telefono ";
+        await BD.Open(sql, [id, nombre, telefono, lada, paginaweb, direccion], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "nombre": nombre,                
+            "telefono": telefono,
+            "lada": lada,
+            "paginaweb": paginaweb,
+            "direccion": direccion
         })
     } catch (error) {
         console.log(error);
