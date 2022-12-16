@@ -69,11 +69,11 @@ router.put("/updateUser/:id", async (req, res, next) => {
 
 
 //DELETE SI
-router.delete("/deletecliente/:telefono/:id", async (req, res) => {
+router.delete("/deletecliente/:telefono", async (req, res) => {
     try {
-        const {telefono, id } = req.params;
-        sql = "DELETE FROM CLIENTE WHERE CLI_TELEFONO=:telefono AND DELETE FROM PEDIDO WHERE PED_CLIENTE=:id" ;
-        await BD.Open(sql, [telefono, id], true);
+        const {telefono } = req.params;
+        sql = "DELETE FROM CLIENTE WHERE CLI_TELEFONO=:telefono" ;
+        await BD.Open(sql, [telefono], true);
         res.json({ "msg": "Usuario Eliminado" })
     } catch (error) {
         console.log(error);
