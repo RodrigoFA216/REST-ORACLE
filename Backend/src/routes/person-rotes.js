@@ -28,6 +28,28 @@ router.get('/readcliente', async (req, res) => {
     })
     res.json(Users);
 })
+router.get('/readcliente/:id', async (req, res) => {
+    const {id}=req.params;
+    sql = "SELECT * FROM cliente WHERE CLI_TELEFONO=:id";
+    let result = await BD.Open(sql, [id], false);
+    Users = [];
+
+    result.rows.map(user => {
+        let userSchema = {
+            "id": user[0],
+            "nombre": user[1],
+            "apellidoP": user[2],
+            "apellidoM": user[3],
+            "refdir": user[4],
+            "telefono": user[5],
+            "lada": user[6],
+            "email": user[7],
+            "direccion": user[8]
+        }
+        Users.push(userSchema);
+    })
+    res.json(Users);
+})
 
 
 //CREATE SI
@@ -52,19 +74,24 @@ router.post('/createcliente', async (req, res) => {
     }
 })
 
-//UPDATE NO
-router.put("/updateUser/:id", async (req, res, next) => {
+//UPDATE SI
+router.put("/updatecliente/:telefono", async (req, res, next) => {
     try {
-        const {id}=req.params;
-        const { name, lastname, gender } = req.body;
+        const {telefono}=req.params;    
+        const { id, nombre, apellidoP, apellidoM, refdir, lada, email, direccion } = req.body;
         
-        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        sql = "UPDATE cliente SET CLIENTE_ID=:id, CLI_NOMBRE=:nombre, CLI_APELLIDOP=:apellidoP, CLI_APELLIDOM=:apellidoM, CLI_REFDIR=:refdir, CLI_TELEFONO=:telefono, CLI_LADA=:lada, CLI_EMAIL=:email, CLI_DIRECCION=:direccion  WHERE CLI_TELEFONO=:telefono ";
+        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, refdir, telefono, lada, email, direccion], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "nombre": nombre,
+            "apellidoP": apellidoP,
+            "apellidoM": apellidoM,
+            "refdir": refdir,
+            "telefono": telefono,
+            "lada": lada,
+            "email": email,
+            "direccion": direccion
         })
     } catch (error) {
         console.log(error);
@@ -128,18 +155,23 @@ router.post('/createempleado', async (req, res) => {
     }
 })
 //UPDATE
-router.put("/updateUser/:id", async (req, res, next) => {
+
+router.put("/updateempleado/:telefono", async (req, res, next) => {
     try {
-        const {id}=req.params;
-        const { name, lastname, gender } = req.body;
-        
-        sql = "UPDATE CUSTOMERS SET FIRST_NAME= :name, LAST_NAME= :lastname, GENDER= :gender WHERE CUSTOMER_ID=:id ";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        const {telefono}=req.params;    
+        const { id, nombre, apellidoP, apellidoM, lada, email, direccion, sucursal} = req.body;
+        sql = "UPDATE empleado SET EMPLEADO_ID=:id, EMP_NOMBRE=:nombre, EMP_APELLIDOP=:apellidoP, EMP_APELLIDOM=:apellidoM, EMP_TELEFONO=:telefono, EMP_LADA=:lada, EMP_EMAIL=:email, EMP_DIRECCION=:direccion, EMP_SUCURSAL=:sucursal WHERE EMP_TELEFONO=:telefono ";
+        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, telefono, lada, email, direccion, sucursal], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "nombre": nombre,
+            "apellidoP": apellidoP,
+            "apellidoM": apellidoM,
+            "telefono": telefono,
+            "lada": lada,
+            "email": email,
+            "direccion": direccion,
+            "sucursal": sucursal
         })
     } catch (error) {
         console.log(error);
