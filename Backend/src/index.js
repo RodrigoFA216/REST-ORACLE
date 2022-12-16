@@ -7,7 +7,7 @@ const app = express();
 const personRoutes = require('./routes/person-rotes');
 
 //settings
-app.set('port', 3000);
+app.set('port', 4000);
 
 //middlewares
 app.use(morgan('dev'));
@@ -22,5 +22,5 @@ app.use(personRoutes);
 
 //run
 app.listen(app.get('port'), () => {
-    console.log('Server on Port 3000')
+    console.log('Server on Port 4000')
 })

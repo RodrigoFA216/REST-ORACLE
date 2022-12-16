@@ -5,7 +5,7 @@ const BD = require('../config/configbd');
 //READ 
 //CLIENTE
 router.get('/readcliente', async (req, res) => {
-    sql = "SELECT * FROM cliente WHERE cli_telefono='32975616'";
+    sql = "SELECT * FROM cliente";
     let result = await BD.Open(sql, [], false);
     Users = [];
 
