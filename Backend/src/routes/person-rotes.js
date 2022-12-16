@@ -2,18 +2,24 @@ const { Router } = require('express');
 const router = Router();
 const BD = require('../config/configbd');
 
-//READ SI
-router.get('/getUsers', async (req, res) => {
-    sql = "SELECT * FROM hr.customers WHERE gender='FEMALE'";
+//READ 
+//CLIENTE
+router.get('/readcliente', async (req, res) => {
+    sql = "SELECT * FROM cliente WHERE cli_telefono='32975616'";
     let result = await BD.Open(sql, [], false);
     Users = [];
-    result.rows[0][0]
+
     result.rows.map(user => {
         let userSchema = {
             "id": user[0],
-            "name": user[1],
-            "lname": user[2],
-            "gender": user[3]
+            "nombre": user[1],
+            "apellidoP": user[2],
+            "apellidoM": user[3],
+            "refdir": user[4],
+            "telefono": user[5],
+            "lada": user[6],
+            "email": user[7],
+            "direccion": user[8]
         }
         Users.push(userSchema);
     })
@@ -21,16 +27,21 @@ router.get('/getUsers', async (req, res) => {
 })
 
 //CREATE SI
-router.post('/addUser', async (req, res) => {
+router.post('/createcliente', async (req, res) => {
     try {
-        const { id, name, lastname, gender } = req.body;
-        sql = "insert into customers(CUSTOMER_ID, FIRST_NAME, LAST_NAME, GENDER) values (:id,:name,:lastname,:gender)";
-        await BD.Open(sql, [id, name, lastname, gender], true);
+        const { id, nombre, apellidoP, apellidoM, refdir, telefono, lada, email, direccion } = req.body;
+        sql = "insert into cliente(CLIENTE_ID, CLI_NOMBRE, CLI_APELLIDOP, CLI_APELLIDOM, CLI_REFDIR, CLI_TELEFONO, CLI_LADA, CLI_EMAIL, CLI_DIRECCION) values (:id,:nombre, :apellidoP, :apellidoM, :refdir, :telefono, :lada, :email, :direccion)";
+        await BD.Open(sql, [id, nombre, apellidoP, apellidoM, refdir, telefono, lada, email, direccion], true);
         res.status(200).json({
             "id": id,
-            "name": name,
-            "lname": lastname,
-            "gender": gender
+            "nombre": nombre,
+            "apellidoP": apellidoP,
+            "apellidoM": apellidoM,
+            "refdir": refdir,
+            "telefono": telefono,
+            "lada": lada,
+            "email": email,
+            "direccion": direccion
         })
     } catch (error) {
         console.log(error);
@@ -58,14 +69,15 @@ router.put("/updateUser/:id", async (req, res, next) => {
 
 
 //DELETE SI
-router.delete("/deleteUser/:id", async (req, res) => {
+router.delete("/deletecliente/:telefono/:id", async (req, res) => {
     try {
-        const { id } = req.params;
-        sql = "DELETE FROM CUSTOMERS WHERE CUSTOMER_ID=:id";
-        await BD.Open(sql, [id], true);
+        const {telefono, id } = req.params;
+        sql = "DELETE FROM CLIENTE WHERE CLI_TELEFONO=:telefono AND DELETE FROM PEDIDO WHERE PED_CLIENTE=:id" ;
+        await BD.Open(sql, [telefono, id], true);
         res.json({ "msg": "Usuario Eliminado" })
     } catch (error) {
         console.log(error);
     }
 })
+
 module.exports = router;

@@ -1,9 +1,9 @@
 const oracledb = require('oracledb');
 
 cns = {
-    user: "hr",
-    password: "123",
-    connectString: "localhost/xe"
+    user: "usr_panaderia",
+    password: "PassPan",
+    connectString: "localhost/xepdb1"
 }
 
 
