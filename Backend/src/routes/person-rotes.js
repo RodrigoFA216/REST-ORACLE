@@ -187,25 +187,25 @@ router.get('/readpedido', async (req, res) => {
     res.json(Users);
 })
 //create
-router.post('/createpedido', async (req, res) => {
+router.post('/createdetallepedido', async (req, res) => {
     try {
-        const { ID, NUMERO, FECHAPED, FECHAENT, TIPOPAGO, CLIENTE, EMPLEADO, PERSONARECIBE, CANTIDAD, PRECIO, TAMAÑO, TIPOHARINA, NOMBRE} = req.body;
-        sql = "insert into detalle_pedido(DETALLE_PED_ID, PED_NUMERO, PED_FECHAPED, PED_FECHAENT, PED_TIPOPAGO, PED_CLIENTE, PED_EMPLEADO, PED_PERSONARECIBE, PAN_CANTIDAD, PAN_PRECIO, PAN_TAMAÑO, PAN_TIPOHARINA, PAN_NOMBRE) values (:ID, :NUMERO, :FECHAPED, :FECHAENT, :TIPOPAGO, :CLIENTE, :EMPLEADO, :PERSONARECIBE, :CANTIDAD, :PRECIO, :TAMAÑO, :TIPOHARINA, :NOMBRE)";
-        await BD.Open(sql, [ ID, NUMERO, FECHAPED, FECHAENT, TIPOPAGO, CLIENTE, EMPLEADO, PERSONARECIBE, CANTIDAD, PRECIO, TAMAÑO, TIPOHARINA, NOMBRE ], true);
+        const { id, numeropedido, fechaped, fechaent, tipopago, cliente, empleado, recibe, cantidad, precio, tamaño, tipoharina, nombrepan } = req.body;
+        sql = "insert into detalle_pedido(DETALLE_PED_ID, PED_NUMERO, PED_FECHAPED, PED_FECHAENT, PED_TIPOPAGO, PED_CLIENTE, PED_EMPLEADO, PED_PERSONARECIBE, PAN_CANTIDAD, PAN_PRECIO, PAN_TAMAÑO, PAN_TIPOHARINA, PAN_NOMBRE) values (:id, :numeropedido, :fechaped, :fechaent, :tipopago, :cliente, :empleado, :recibe, :cantidad, :precio, :tamaño, :tipoharina, :nombrepan)";
+        await BD.Open(sql, [id, numeropedido, fechaped, fechaent, tipopago, cliente, empleado, recibe, cantidad, precio, tamaño, tipoharina, nombrepan], true);
         res.status(200).json({
-            "id": ID,
-            "numero": NUMERO,
-            "FechaPedido": FECHAPED,
-            "FechaEntrega": FECHAENT,
-            "TipoPago": TIPOPAGO,
-            "Cliente": CLIENTE,
-            "Empleado": EMPLEADO,
-            "PersonaRecibe": PERSONARECIBE,
-            "CantidadPan": CANTIDAD,
-            "Precio": PRECIO,
-            "Tamaño": TAMAÑO,
-            "TipoHarina": TIPOHARINA,
-            "Nombre": NOMBRE
+            "id": id,
+            "numeropedido": numeropedido,
+            "fechaped": fechaped,
+            "fechaent": fechaent,
+            "tipopago": tipopago,
+            "cliente": cliente,
+            "empleado": empleado,
+            "recibe": recibe,
+            "cantidad": cantidad,
+            "precio": precio,
+            "tamaño": tamaño,
+            "tipoharina": tipoharina,
+            "nombrepan": nombrepan
         })
     } catch (error) {
         console.log(error);
